@@ -173,7 +173,8 @@ class UIDataAdpater{
      * 将list=[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
      * keys=[{id:"level1",label:"level1Name"},{id:"level2",label:"level2Name"}]
      * retult = treeAdapter(list,keys);
-     * 转换成适合elementUI库里的树节点使用的格式。
+     * 转换成适合elementUI库里的树节点使用的格式。树组件的props属性需设置为，{children: 'children',label: 'label'},
+     * 不满意可以改造，函数多加个config配置项将该项设为可配置项。
      * @param {*} data
      * @param {*} keys
      * @returns
