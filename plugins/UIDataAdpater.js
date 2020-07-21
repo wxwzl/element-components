@@ -129,8 +129,9 @@ class UIDataAdpater{
     }
     /**
      *"
-     * 将[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
-     * keys[]
+     * 将list=[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
+     * keys=[level1:"",Levek2:"",Level3:"",]
+     * retult = cascaderAdapter(list,keys);
      * 转换成适合elementUI库里的级联选择器使用的格式。
      * @param {*} data
      * @param {*} keys
@@ -168,7 +169,47 @@ class UIDataAdpater{
         return array;
     }
 
-    
+    /**
+     * 将list=[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
+     * keys=[{id:"level1",label:"level1Name"},{id:"level2",label:"level2Name"}]
+     * retult = treeAdapter(list,keys);
+     * 转换成适合elementUI库里的树节点使用的格式。
+     * @param {*} data
+     * @param {*} keys
+     * @returns
+     * @memberof UIDataAdpater
+     */
+    treeAdapter(data,keys){
+        let obj = {};
+        let array = [];
+        if(data instanceof Array &&  keys instanceof Array) {
+            const len = keys.length;
+            let item = null;
+            let keyObj = null;
+            let value = null;
+            let label = null;
+            let id='';
+            const dataLen = data.length;
+            let temp = null;
+            for(let i = 0; i < dataLen; i++) {
+                item = data[i];
+                let j = 0;
+                temp = obj;
+                while(j < len) {
+                    keyObj = keys[j];
+                    id= item[keyObj.id];
+                    label=item[keyObj.label];
+                    if(!temp[id]){
+                        temp[id]={ id:i,label:label,children:{},data:item};
+                    }
+                    temp = temp[id].children;
+                    j++;
+                }
+            }
+            array = this.object2Array(obj,'children');
+        }
+        return array;
+    }
 
     object2Array(obj,recursiveKey){
         let array = [];
