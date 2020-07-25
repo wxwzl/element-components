@@ -15,9 +15,20 @@
         <slot name="expand"></slot>
          <!--渲染字段列-->
         <template v-for="(columnItem,index) in tableColumns">
+            <!-- <template v-if="tableSetting.hideHeader">
+                <el-table-column  :label="$t(columnItem.label)" 
+                        :min-width="columnItem.width?columnItem.width:'180'" 
+                        :key="index+1"
+                        :prop="columnItem.prop"
+                        :align="columnItem.align"
+                        :show-overflow-tooltip="true"
+                        :formatter='columnItem.formatter?columnItem.formatter:commonFormatter' >
+                        <template slot="header">""</template>
+                </el-table-column>
+            </template> -->
             <template v-if='columnItem.tip'>
                 <el-table-column 
-                :label="$t(columnItem.label)" 
+                :label="tableSetting.i18n!==false?$t(columnItem.label):columnItem.label" 
                 :min-width="columnItem.width?columnItem.width:'180'" 
                 :key="index+1"
                 :prop="columnItem.prop"
@@ -26,10 +37,10 @@
                 :formatter='columnItem.formatter?columnItem.formatter:commonFormatter'
                 :align="columnItem.align">
                     <template slot="header">
-                            {{$t(columnItem.label)}}
+                            {{tableSetting.i18n!==false?$t(columnItem.label):columnItem.label}}
                         <el-tooltip class="item" effect="dark" placement="top">
                             <div slot="content">
-                                <span v-html="$t(columnItem.tipLabel)"></span>
+                                <span v-html="tableSetting.i18n!==false?$t(columnItem.tipLabel):columnItem.tipLabel"></span>
                             </div>
                             <i class="el-icon-question"></i>
                         </el-tooltip> 
@@ -37,7 +48,7 @@
                 </el-table-column>
             </template>
             <template v-else>
-                <el-table-column  :label="$t(columnItem.label)" 
+                <el-table-column  :label="tableSetting.i18n!==false?$t(columnItem.label):columnItem.label" 
                         :min-width="columnItem.width?columnItem.width:'180'" 
                         :key="index+1"
                         :prop="columnItem.prop"
@@ -66,8 +77,8 @@ export default {
     props:{
         formatter:{
             type:Function,
-            default:function(){
-                return null;
+            default:function(row, column, cellValue, index){
+                return cellValue;
             }
         },
         columns:{
