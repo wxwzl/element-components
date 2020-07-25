@@ -77,6 +77,7 @@ export default {
     props:{
         formatter:{
             type:Function,
+            //是个必选项，默认函数渲染不了。。。
             default:function(row, column, cellValue, index){
                 return cellValue;
             }
