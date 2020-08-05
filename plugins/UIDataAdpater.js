@@ -212,6 +212,46 @@ class UIDataAdpater{
         return array;
     }
 
+
+    /**
+     *
+     * 
+     * @param {*} data
+     * @param {*} option {label:labelKey,value:"valueKey"}
+     * @memberof UIDataAdpater
+     */
+    selectAdapter(data,option){
+        let array = [];
+        if(data instanceof Array) {
+            let len =data.length;
+            let label=null,value=null,item=null,labelKey=option.label,valueKey=option.value;
+            for(let i=0;i<len;i++){
+                item = data[i];
+                label = item[labelKey];
+                value = item[valueKey];
+                array.push({label:label,value:value});
+            }
+        }else{
+            console.error("data  must be Array type!");
+        }
+        return array;
+    }
+
+    scrollToTop(){
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 0) {
+            window.requestAnimationFrame(this.scrollToTop.bind(this));
+            let diff = scrollTop/8;
+            if(diff<20){
+                diff=20;
+            }
+            document.body.scrollTop=scrollTop-diff;
+            document.documentElement.scrollTop=scrollTop-diff;
+            // Window.scrollTo(0,scrollTop-/ 8)
+            // window.scroll(0, scrollTop/ 8);
+        }
+    }
+
     object2Array(obj,recursiveKey){
         let array = [];
         this.walkObj(obj,function(value){
@@ -260,6 +300,24 @@ class UIDataAdpater{
             number=2;
         }
         return Math.floor(num*Math.pow(10,number))/Math.pow(10,number);
+    }
+
+    /**
+     *
+     *截取前后字符串
+     * @param {*} str
+     * @returns
+     * @memberof BaseController
+     */
+    trim(str){
+        return str.replace(/(^[ \t\n\r]+)|([ \t\n\r]+$)/g, '');
+    }
+
+    isEmpty(str){
+        if(str===""||str===undefined ||str ==null){
+            return true;
+        }
+        return false;
     }
 }
 const installObj={};
