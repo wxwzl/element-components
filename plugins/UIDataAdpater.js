@@ -130,7 +130,7 @@ class UIDataAdpater{
     /**
      *"
      * 将list=[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
-     * keys=[level1:"",Levek2:"",Level3:"",]
+     * keys=[level1,Levek2:"",Level3:"",]
      * retult = cascaderAdapter(list,keys);
      * 转换成适合elementUI库里的级联选择器使用的格式。
      * @param {*} data
@@ -138,36 +138,36 @@ class UIDataAdpater{
      * @returns
      * @memberof UIDataAdpater
      */
-    cascaderAdapter(data,keys){
-        let obj={};
-        let array=[]; 
-        if(data instanceof Array &&  keys instanceof Array){
-            let len = keys.length;
-            let item=null;
-            let key=null;
-            let value= null;
+    cascaderAdapter(data,keys) {
+        let obj = {};
+        let array = [];
+        if(data instanceof Array &&  keys instanceof Array) {
+            const len = keys.length;
+            let item = null;
+            let keyObj = null;
+            let value = null;
             let label = null;
-            let dataLen = data.length;
-            let temp=null;
-            for(let i=0;i<dataLen;i++){
-                item=data[i];
-                let j=0;
-                temp=obj;
-                while(j<len){
-                    key = keys[j];
-                    value = item[key];
-                    label = value;
-                    if(!temp[value]){
-                        temp[value]={value:value,label:label,children:{}};
+            const dataLen = data.length;
+            let temp = null;
+            for(let i = 0; i < dataLen; i++) {
+                item = data[i];
+                let j = 0;
+                temp = obj;
+                while(j < len) {
+                    keyObj = keys[j];
+                    value = item[keyObj.value];
+                    label = item[keyObj.label];
+                    if(!temp[value]) {
+                        temp[value] = { value:value,label:label,children:{}};
                     }
-                    temp=temp[value].children;
+                    temp = temp[value].children;
                     j++;
                 }
             }
-            array=this.object2Array(obj,"children");
+            array = this.object2Array(obj,'children');
         }
-        return array;
-    }
+        return array
+    } 
 
     /**
      * 将list=[{level1:"",Levek2:"",Level3:"",others:""}]这样的数据根据
