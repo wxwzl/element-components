@@ -4,28 +4,19 @@
     :data="tableData" 
     stripe 
     border
+    :current-row-key="tableSetting.currentRowKey"
     :row-key="tableSetting.rowKey"
     :show-header="tableSetting.showHeader"
     :tree-props="tableSetting.treeProps"
     :highlight-current-row="true"
     :cell-style="tableSetting.cellStyle"
+    :height="tableSetting.height"
     :fit='true'
     @sort-change="onSortChange"
     :header-cell-style="tableSetting.headerCellStyle?tableSetting.headerCellStyle:{background:'#F2F6FC'}">
         <slot name="expand"></slot>
          <!--渲染字段列-->
         <template v-for="(columnItem,index) in tableColumns">
-            <!-- <template v-if="tableSetting.hideHeader">
-                <el-table-column  :label="$t(columnItem.label)" 
-                        :min-width="columnItem.width?columnItem.width:'180'" 
-                        :key="index+1"
-                        :prop="columnItem.prop"
-                        :align="columnItem.align"
-                        :show-overflow-tooltip="true"
-                        :formatter='columnItem.formatter?columnItem.formatter:commonFormatter' >
-                        <template slot="header">""</template>
-                </el-table-column>
-            </template> -->
             <template v-if='columnItem.tip'>
                 <el-table-column 
                 :label="tableSetting.i18n!==false?$t(columnItem.label):columnItem.label" 
@@ -34,6 +25,7 @@
                 :prop="columnItem.prop"
                 :show-overflow-tooltip="true"
                 :sortable="columnItem.sortable" 
+                :fixed="columnItem.fixed"
                 :formatter='columnItem.formatter?columnItem.formatter:commonFormatter'
                 :align="columnItem.align">
                     <template slot="header">
@@ -47,11 +39,15 @@
                     </template>
                 </el-table-column>
             </template>
+            <template v-else-if="columnItem.slot">
+                <slot :name="'slot'+index" v-bind:columnItem="columnItem"></slot>
+            </template>
             <template v-else>
                 <el-table-column  :label="tableSetting.i18n!==false?$t(columnItem.label):columnItem.label" 
                         :min-width="columnItem.width?columnItem.width:'180'" 
                         :key="index+1"
                         :prop="columnItem.prop"
+                        :fixed="columnItem.fixed"
                         :align="columnItem.align"
                         :show-overflow-tooltip="true"
                         :sortable="columnItem.sortable" 
@@ -59,6 +55,7 @@
                 </el-table-column>
             </template>
         </template>
+          <slot name="lastColumn"></slot>
     </el-table>
 </template>
 <script>
@@ -77,7 +74,6 @@ export default {
     props:{
         formatter:{
             type:Function,
-            //是个必选项，默认函数渲染不了。。。
             default:function(row, column, cellValue, index){
                 return cellValue;
             }
